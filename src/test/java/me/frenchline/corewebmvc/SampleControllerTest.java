@@ -30,7 +30,7 @@ public class SampleControllerTest {
                     .param("name", "frenchline")
         )
                 .andDo(print())
-                .andExpect(status().isOk())
+                .andExpect(status().isBadRequest()) //400 status code
         ;
     }
 }
