@@ -14,12 +14,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @since 2019-11-23
  */
 @Controller
-
+@RequestMapping("/hello") //클래스 레벨 URI
 public class SampleController {
 
-    /* URI 특정 패턴으로 맵핑 : 여러 패스가 오는 경우 asterisk(*)을 2개 사용 */
-    /* asterisk(*)이 2개면 path의 갯수와 상관없이 전부 맵핑된다 */
-    @RequestMapping("/hello/**")
+    @RequestMapping("/**") //메서드 레벨 URI
     @ResponseBody
     public String hello() {
         return "hello";
