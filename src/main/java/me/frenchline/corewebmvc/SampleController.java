@@ -1,6 +1,8 @@
 package me.frenchline.corewebmvc;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -12,11 +14,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 public class SampleController {
 
-    // "/hello?name=frenchline
-
-    @RequestMapping(value = "/hello", params = "name=frenchline") //정확하게 파라미터 값이 일치할 경우 요청을 처리한다
+    @GetMapping("/hello")
     @ResponseBody
     public String hello() {
+        return "hello";
+    }
+
+    @PostMapping("/hello")
+    @ResponseBody
+    public String helloPost() {
         return "hello";
     }
 

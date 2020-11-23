@@ -8,9 +8,11 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.head;
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.CoreMatchers.hasItems;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.options;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
@@ -27,11 +29,17 @@ public class SampleControllerTest {
 
     @Test
     public void helloTest() throws Exception {
-        mockMvc.perform(head("/hello") //응답 시 본문을 제외한 헤더 정보만 가져오도록 요청
-                    .param("name", "frenchline")
-        )
-                .andDo(print())
+        mockMvc.perform(options("/hello")) //HTTP Method = OPTIONS
+                .andDo(print()) //Headers = [Allow:"POST,GET,HEAD,OPTIONS"]
                 .andExpect(status().isOk())
+                .andExpect(header().exists(HttpHeaders.ALLOW))
+                .andExpect(header().stringValues(HttpHeaders.ALLOW,
+                        hasItems(
+                                containsString("GET"),
+                                containsString("POST"),
+                                containsString("HEAD"),
+                                containsString("OPTIONS")
+                                )))
         ;
     }
 }
