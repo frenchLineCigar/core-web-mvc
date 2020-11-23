@@ -20,7 +20,7 @@ public class SampleController {
 
     // "/hello?name=frenchline
 
-    @RequestMapping(value = "/hello", params = "name=spring") //정확하게 파라미터 값이 일치할 경우 요청을 처리한다
+    @RequestMapping(value = "/hello", params = "name=frenchline") //정확하게 파라미터 값이 일치할 경우 요청을 처리한다
     @ResponseBody
     public String hello() {
         return "hello";
