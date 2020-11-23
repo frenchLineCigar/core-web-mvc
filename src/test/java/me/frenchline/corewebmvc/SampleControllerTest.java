@@ -28,16 +28,17 @@ public class SampleControllerTest {
 
     @Autowired
     MockMvc mockMvc;
-
-    /* 패턴이 중복되는 경우에는 가장 구체적으로 맵핑되는 핸들러가 선택*/
+    
     @Test
     public void helloTest() throws Exception {
-        mockMvc.perform(get("/hello/frenchline.json"))
+        mockMvc.perform(get("/hello/frenchline.xml"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string("hello frenchline"))
-                .andExpect(handler().handlerType(SampleController.class))
-                .andExpect(handler().methodName("helloFrenchline"))
+        ;
+
+        mockMvc.perform(get("/hello/frenchline"))
+                .andDo(print())
+                .andExpect(status().isOk())
         ;
     }
 }
