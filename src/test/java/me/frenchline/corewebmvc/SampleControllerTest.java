@@ -26,7 +26,7 @@ public class SampleControllerTest {
 
     @Test
     public void getEvent() throws Exception {
-        mockMvc.perform(get("/events/id/1/name/frenchline"))
+        mockMvc.perform(get("/events/1;name=frenchline"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1))
