@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @since 2019-11-23
  */
 @Controller
-@RequestMapping(value = "/hello")
 public class SampleController {
 
-    @RequestMapping(method = {RequestMethod.GET, RequestMethod.PUT})
+    /* URI 문자열 여러개 맵핑 */
+    @GetMapping(value = {"/hello", "/hi"})
     @ResponseBody
     public String hello() {
         return "hello";

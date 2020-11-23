@@ -33,14 +33,11 @@ public class SampleControllerTest {
         mockMvc.perform(get("/hello")) //perform의 인자값은 MockHttpServletRequest 만들때 사용
                 .andDo(print())
                 .andExpect(status().isOk()) //Status = 200
-                .andExpect(content().string("hello"));
+        ;
 
-        mockMvc.perform(put("/hello"))
+        mockMvc.perform(get("/hi"))
                 .andDo(print())
-                .andExpect(status().isOk()); //Status = 200
-
-        mockMvc.perform(post("/hello"))
-                .andDo(print())
-                .andExpect(status().isMethodNotAllowed()); //Status = 405
+                .andExpect(status().isOk()) //Status = 200
+        ;
     }
 }
