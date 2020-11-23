@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping("/hello")
 public class SampleController {
 
-    @RequestMapping("/frenchline")
+    @RequestMapping({"/frenchline", "/frenchline.*"})
     @ResponseBody
     public String helloFrenchline() {
         return "hello frenchline";

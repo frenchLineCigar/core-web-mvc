@@ -32,7 +32,7 @@ public class SampleControllerTest {
     /* 패턴이 중복되는 경우에는 가장 구체적으로 맵핑되는 핸들러가 선택*/
     @Test
     public void helloTest() throws Exception {
-        mockMvc.perform(get("/hello/frenchline"))
+        mockMvc.perform(get("/hello/frenchline.json"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string("hello frenchline"))
