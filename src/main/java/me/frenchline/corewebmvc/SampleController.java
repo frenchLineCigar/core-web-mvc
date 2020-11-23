@@ -18,7 +18,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 public class SampleController {
 
-    @RequestMapping(value = "/hello", headers = HttpHeaders.AUTHORIZATION + "=" + "111") //특정 헤더 키/값과 정확하게 일치하는 요청만 처리
+    // "/hello?name=frenchline
+
+    @RequestMapping(value = "/hello", params = "name") //특정 파라미터가 있고 파라미터명이 일치해야 요청을 처리한다
     @ResponseBody
     public String hello() {
         return "hello";
