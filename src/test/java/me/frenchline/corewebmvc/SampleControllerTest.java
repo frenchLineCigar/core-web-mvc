@@ -4,6 +4,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -29,15 +30,12 @@ public class SampleControllerTest {
     @Autowired
     MockMvc mockMvc;
 
-    /* 확장자 맵핑은 스프링 부트에서 기본적으로 지원하지 않음 */
     @Test
     public void helloTest() throws Exception {
-        mockMvc.perform(get("/hello/frenchline.xml"))
-                .andDo(print())
-                .andExpect(status().isNotFound()) //404 Not Found
-        ;
-
-        mockMvc.perform(get("/hello/frenchline"))
+        mockMvc.perform(get("/hello")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    //.accept(MediaType.APPLICATION_JSON)
+        )
                 .andDo(print())
                 .andExpect(status().isOk())
         ;
