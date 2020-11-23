@@ -31,9 +31,10 @@ public class SampleControllerTest {
 
     @Test
     public void helloTest() throws Exception {
-        mockMvc.perform(get("/hello/123/456"))
+        mockMvc.perform(get("/hello/frenchline"))
                 .andDo(print())
                 .andExpect(status().isOk())
+                .andExpect(content().string("hello frenchline"))
         ;
     }
 }

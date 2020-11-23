@@ -14,13 +14,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @since 2019-11-23
  */
 @Controller
-@RequestMapping("/hello") //클래스 레벨 URI
+@RequestMapping("/hello")
 public class SampleController {
 
-    @RequestMapping("/**") //메서드 레벨 URI
+    @RequestMapping("/{name:[a-z]+}") //a부터 z에 해당하는 문자열 여러개
     @ResponseBody
-    public String hello() {
-        return "hello";
+    public String hello(@PathVariable String name) {
+        return "hello " + name;
 
     }
 
