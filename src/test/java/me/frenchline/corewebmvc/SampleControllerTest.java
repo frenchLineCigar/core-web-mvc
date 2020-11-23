@@ -33,8 +33,7 @@ public class SampleControllerTest {
     @Test
     public void helloTest() throws Exception {
         mockMvc.perform(get("/hello")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    //.accept(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.FROM, "localhost")
         )
                 .andDo(print())
                 .andExpect(status().isOk())
