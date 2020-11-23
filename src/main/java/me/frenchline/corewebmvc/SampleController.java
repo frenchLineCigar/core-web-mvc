@@ -17,10 +17,17 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping("/hello")
 public class SampleController {
 
-    @RequestMapping("/{name:^[a-zA-Z0-9]*$}")
+    @RequestMapping("/frenchline")
     @ResponseBody
-    public String hello(@PathVariable String name) {
-        return "hello " + name;
+    public String helloFrenchline() {
+        return "hello frenchline";
+
+    }
+
+    @RequestMapping("/**")
+    @ResponseBody
+    public String hello() {
+        return "hello frenchline";
 
     }
 
