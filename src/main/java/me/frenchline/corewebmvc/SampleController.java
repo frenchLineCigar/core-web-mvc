@@ -17,9 +17,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 public class SampleController {
 
-    /* URI 특정 패턴으로 맵핑 : 여러 글자가 오는 경우 asterisk(*)을 사용 */
-    /* asterisk(*)이 1개만 있으면 1개의 path만 맵핑 */
-    @RequestMapping("/hello/*")
+    /* URI 특정 패턴으로 맵핑 : 여러 패스가 오는 경우 asterisk(*)을 2개 사용 */
+    /* asterisk(*)이 2개면 path의 갯수와 상관없이 전부 맵핑된다 */
+    @RequestMapping("/hello/**")
     @ResponseBody
     public String hello() {
         return "hello";
