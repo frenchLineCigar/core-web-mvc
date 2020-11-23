@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 public class SampleController {
 
-    @RequestMapping(value = "/hello", headers = "!" + HttpHeaders.FROM) //FROM 헤더가 들어있는 요청만 처리 (주의: CONTENT_TYPE, ACCEPT은 조건 적용이 X)
+    @RequestMapping(value = "/hello", headers = HttpHeaders.AUTHORIZATION + "=" + "111") //특정 헤더 키/값과 정확하게 일치하는 요청만 처리
     @ResponseBody
     public String hello() {
         return "hello";
