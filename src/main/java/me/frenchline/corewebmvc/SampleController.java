@@ -18,8 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class SampleController {
 
     /* 확장자 맵핑은 스프링 부트에서 기본적으로 지원하지 않음 */
-    /* 확장자 맵핑을 사용하고 싶으면 아래처럼 명시적으로 지정 */
-    @RequestMapping({"/frenchline.*", "/frenchline"})
+    @RequestMapping({"/frenchline"})
     @ResponseBody
     public String helloFrenchline() {
         return "hello frenchline";

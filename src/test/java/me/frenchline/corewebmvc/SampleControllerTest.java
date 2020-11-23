@@ -28,12 +28,13 @@ public class SampleControllerTest {
 
     @Autowired
     MockMvc mockMvc;
-    
+
+    /* 확장자 맵핑은 스프링 부트에서 기본적으로 지원하지 않음 */
     @Test
     public void helloTest() throws Exception {
         mockMvc.perform(get("/hello/frenchline.xml"))
                 .andDo(print())
-                .andExpect(status().isOk())
+                .andExpect(status().isNotFound()) //404 Not Found
         ;
 
         mockMvc.perform(get("/hello/frenchline"))
