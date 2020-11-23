@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping("/hello")
 public class SampleController {
 
-    @RequestMapping("/{name:[a-z]+}") //a부터 z에 해당하는 문자열 여러개
+    @RequestMapping("/{name:^[a-zA-Z0-9]*$}")
     @ResponseBody
     public String hello(@PathVariable String name) {
         return "hello " + name;
