@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 public class SampleController {
 
-    /* URI 문자열 여러개 맵핑 */
-    @GetMapping(value = {"/hello", "/hi"})
+    /* URI 특정 패턴으로 맵핑 : 글자 하나 당 물음표 하나로 처리 */
+    @GetMapping(value = {"/hello???"})
     @ResponseBody
     public String hello() {
         return "hello";

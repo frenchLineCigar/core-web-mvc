@@ -21,7 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * @contact frenchline707@gmail.com
  * @since 2019-11-23
  */
-@RunWith(SpringRunner.class) //@RunWith는 JUnit용 애노테이션, SpringRunner.class는 스프링에서 제공해주는 JUnit용 러너
+@RunWith(SpringRunner.class)
 @WebMvcTest
 public class SampleControllerTest {
 
@@ -30,14 +30,9 @@ public class SampleControllerTest {
 
     @Test
     public void helloTest() throws Exception {
-        mockMvc.perform(get("/hello")) //perform의 인자값은 MockHttpServletRequest 만들때 사용
+        mockMvc.perform(get("/hello1A@"))
                 .andDo(print())
-                .andExpect(status().isOk()) //Status = 200
-        ;
-
-        mockMvc.perform(get("/hi"))
-                .andDo(print())
-                .andExpect(status().isOk()) //Status = 200
+                .andExpect(status().isOk())
         ;
     }
 }
