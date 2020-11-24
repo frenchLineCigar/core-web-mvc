@@ -50,7 +50,8 @@ public class SampleController {
     @PostMapping("/events/form/limit")
     public String eventsFormLimitSubmit(@Validated @ModelAttribute Event event,
                                         BindingResult bindingResult,
-                                        SessionStatus sessionStatus) {
+                                        SessionStatus sessionStatus,
+                                        Model model) {
 
         System.out.println("event = " + event);
 
@@ -60,6 +61,14 @@ public class SampleController {
 
         //save 후 세션 비우기
         sessionStatus.setComplete();
+
+        /* RedirectAttributes가 없는 상태 */
+        // (순수 스프링 웹 MVC) 기본적으로 모델의 데이터 중 primitive type 은 자동으로 URI path에 쿼리 파라미터로 추가가 된다
+        // (스프링 부트 웹 MVC) 위 자동 설정이 비활성화 돼있다: spring.mvc.ignore-default-model-on-redirect=true
+        // Ex) /events/list?name=spring&limit=10
+        model.addAttribute("name", event.getName());
+        model.addAttribute("limit", event.getLimit());
+
         return "redirect:/events/list";
     }
 
