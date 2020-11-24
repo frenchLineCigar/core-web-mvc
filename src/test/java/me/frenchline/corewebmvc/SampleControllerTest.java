@@ -6,6 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.web.servlet.ModelAndView;
+
+import java.util.Map;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -38,12 +42,15 @@ public class SampleControllerTest {
 
     @Test
     public void postEvent() throws Exception {
-        mockMvc.perform(post("/events/name/frenchline")
-                        .param("limit", "-10")) //바인딩 에러 발생
+        ResultActions result = mockMvc.perform(post("/events")
+                .param("name", "frenchline")
+                .param("limit", "-10"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name").value("frenchline"))
-        ;
+                .andExpect(model().hasErrors());
+        ModelAndView mav = result.andReturn().getModelAndView();
+        Map<String, Object> model = mav.getModel();
+        System.out.println(model.size());
     }
 
 }

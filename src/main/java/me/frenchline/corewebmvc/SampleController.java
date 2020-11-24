@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author swlee
@@ -28,16 +30,31 @@ public class SampleController {
         return "/events/form";
     }
 
-    @PostMapping("/events/name/{name}")
-    @ResponseBody
-    public Event getEvent(@Validated(Event.ValidateName.class) @ModelAttribute Event event, BindingResult bindingResult) {
+    @PostMapping("/events")
+    public String createEvent(@Validated @ModelAttribute Event event,
+                           BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            System.out.println("=======================");
+            return "/events/form";
         }
-        bindingResult.getAllErrors().forEach(c -> {
-            System.out.println("c = " + c.toString());
-        });
-        return event;
+
+        //save
+
+        return "redirect:/events/list";
+    }
+
+    @GetMapping("/events/list")
+    public String getEvents(Model model) {
+
+        //find
+        Event event = new Event();
+        event.setName("spring");
+        event.setLimit(10);
+        List<Event> eventList = new ArrayList<>();
+        eventList.add(event);
+
+        model.addAttribute(eventList);
+
+        return "/events/list";
     }
 
 }
