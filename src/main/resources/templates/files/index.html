@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>File Upload</title>
+</head>
+<body>
+
+<!-- 업로드 처리 후 message -->
+<div th:if="${message}">
+    <h2 th:text="${message}"/>
+</div>
+
+<form method="POST" enctype="multipart/form-data" action="#" th:action="@{/file}">
+    File: <input type="file" name="file"/>
+    <input type="submit" value="Upload"/>
+</form>
+
+</body>
+</html>
+
+
+<!--
+[ 코드 설명 ]
+1. <form method="POST" enctype="multipart/form-data" action="#" th:action="@{/file}">
+POST 요청 /file 에 multipart/form-data 인크립트 타입으로 요청을 보낸다.
+2. File: <input type="file" name="file"/>
+요청에 들어있는 file을 MultipartFile 타입의 아규먼트로 받아본다.
+-->
