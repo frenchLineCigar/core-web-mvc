@@ -56,8 +56,6 @@ public class SampleController {
                                         SessionStatus sessionStatus,
                                         RedirectAttributes attributes) { //RedirectAttribute 사용
 
-        System.out.println("event = " + event);
-
         if (bindingResult.hasErrors()) {
             return "/events/form-limit";
         }
@@ -73,27 +71,31 @@ public class SampleController {
         return "redirect:/events/list";
     }
 
+
+    /**
+     * `@ModelAttribute` 사용해 복합 객체(composite object)로 바인딩 시 주의점
+     * -> `@SessionAttributes` 에서 키로 사용한 "이름"과 같이 쓰면 안된다. @SessionAttributes("event")
+     * -> 복합 객체로 바인딩 시, 세션에서 일단 해당 속성의 키로 사용한 "이름"으로 값을 찾아보려고 시도하지만, 앞서 세션이 완료되고, 없기 때문에 에러가 난다. -> 해당 에러 확인!
+     * -> 콘솔 확인
+     * org.springframework.web.HttpSessionRequiredException: Expected session attribute 'event'
+     * 	at org.springframework.web.method.annotation.ModelFactory.initModel(ModelFactory.java:112) <- 소스 코드를 까보면 세션에서 일단 찾고, 없으면 예외를 뱉는다
+     */
     @GetMapping("/events/list")
-    public String getEvents(@RequestParam String name,
-                            @RequestParam Integer limit,
+    public String getEvents(@ModelAttribute Event event, //@ModelAttribute 사용해 복합 객체(composite object)로 바인딩 시, 에러 발생
                             Model model,
                             @SessionAttribute LocalDateTime visitTime) {
 
         //@SessionAttribute 사용해 HTTP 세션에 들어있는 값 참조
         System.out.println("visitTime = " + visitTime);
 
-        Event newEvent = new Event();
-        newEvent.setName(name);
-        newEvent.setLimit(limit);
-
         //find 조회한 데이터로 가정
-        Event event = new Event();
-        event.setName("spring");
-        event.setLimit(10);
+        Event spring = new Event();
+        spring.setName("spring");
+        spring.setLimit(10);
 
         List<Event> eventList = new ArrayList<>();
+        eventList.add(spring);
         eventList.add(event);
-        eventList.add(newEvent);
 
         model.addAttribute("eventList", eventList);
 
