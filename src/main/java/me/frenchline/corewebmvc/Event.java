@@ -42,12 +42,12 @@ public class Event {
         this.limit = limit;
     }
 
-    @Override
-    public String toString() {
-        return "Event{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", limit=" + limit +
-                '}';
-    }
+//    @Override
+//    public String toString() {
+//        return "Event{" +
+//                "id=" + id +
+//                ", name='" + name + '\'' +
+//                ", limit=" + limit +
+//                '}';
+//    }
 }

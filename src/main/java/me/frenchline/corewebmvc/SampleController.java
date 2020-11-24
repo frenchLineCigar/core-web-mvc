@@ -8,10 +8,12 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 
 import javax.servlet.http.HttpSession;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +23,7 @@ import java.util.List;
  * @since 2019-11-23
  */
 @Controller
-@SessionAttributes("event") //모델의 애트리뷰트 중 event를 세션에도 자동으로 넣어줌 (세션과 모델은 같은 객체를 참조)
+@SessionAttributes("event") //이 클래스 안에서만, 이 이름에 해당하는 모델 애트리뷰트를 세션에 넣어준다.
 public class SampleController {
 
     @GetMapping("/events/form/name") //name만 받는 폼
@@ -31,7 +33,8 @@ public class SampleController {
     }
 
     @PostMapping("/events/form/name")
-    public String eventsFormNameSubmit(@Validated @ModelAttribute Event event, BindingResult bindingResult) {
+    public String eventsFormNameSubmit(@Validated @ModelAttribute Event event,
+                                       BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "/events/form-name";
         }
@@ -39,18 +42,15 @@ public class SampleController {
     }
 
     @GetMapping("/events/form/limit") //limit만 받는 폼
-    public String eventsFormLimit() {
+    public String eventsFormLimit(@ModelAttribute Event event, Model model) {
+        model.addAttribute("event", event);
         return "/events/form-limit";
     }
 
-//    @GetMapping("/events/form/limit") //limit만 받는 폼
-//    public String eventsFormLimit(@ModelAttribute Event event, Model model) {
-//        model.addAttribute("event", event);
-//        return "/events/form-limit";
-//    }
-
     @PostMapping("/events/form/limit")
-    public String eventsFormLimitSubmit(@Validated @ModelAttribute Event event, BindingResult bindingResult, SessionStatus sessionStatus) {
+    public String eventsFormLimitSubmit(@Validated @ModelAttribute Event event,
+                                        BindingResult bindingResult,
+                                        SessionStatus sessionStatus) {
 
         System.out.println("event = " + event);
 
@@ -64,7 +64,9 @@ public class SampleController {
     }
 
     @GetMapping("/events/list")
-    public String getEvents(Model model) {
+    public String getEvents(Model model, @SessionAttribute LocalDateTime visitTime) {
+
+        System.out.println("visitTime = " + visitTime); //@SessionAttribute 사용해 HTTP 세션에 들어있는 값 참조
 
         //find 조회한 데이터로 가정
         Event event = new Event();
