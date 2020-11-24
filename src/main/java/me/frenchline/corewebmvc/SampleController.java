@@ -7,10 +7,13 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
@@ -51,7 +54,7 @@ public class SampleController {
     public String eventsFormLimitSubmit(@Validated @ModelAttribute Event event,
                                         BindingResult bindingResult,
                                         SessionStatus sessionStatus,
-                                        Model model) {
+                                        RedirectAttributes attributes) { //RedirectAttribute 사용
 
         System.out.println("event = " + event);
 
@@ -62,28 +65,35 @@ public class SampleController {
         //save 후 세션 비우기
         sessionStatus.setComplete();
 
-        /* RedirectAttributes가 없는 상태 */
-        // (순수 스프링 웹 MVC) 기본적으로 모델의 데이터 중 primitive type 은 자동으로 URI path에 쿼리 파라미터로 추가가 된다
-        // (스프링 부트 웹 MVC) 위 자동 설정이 비활성화 돼있다: spring.mvc.ignore-default-model-on-redirect=true
+        /* RedirectAttributes 사용 (스프링 부트 기본 설정 유지) */
         // Ex) /events/list?name=spring&limit=10
-        model.addAttribute("name", event.getName());
-        model.addAttribute("limit", event.getLimit());
+        attributes.addAttribute("name", event.getName());
+        attributes.addAttribute("limit", event.getLimit());
 
         return "redirect:/events/list";
     }
 
     @GetMapping("/events/list")
-    public String getEvents(Model model, @SessionAttribute("visitTime") LocalDateTime visitTime) {
+    public String getEvents(@RequestParam String name,
+                            @RequestParam Integer limit,
+                            Model model,
+                            @SessionAttribute LocalDateTime visitTime) {
 
         //@SessionAttribute 사용해 HTTP 세션에 들어있는 값 참조
         System.out.println("visitTime = " + visitTime);
+
+        Event newEvent = new Event();
+        newEvent.setName(name);
+        newEvent.setLimit(limit);
 
         //find 조회한 데이터로 가정
         Event event = new Event();
         event.setName("spring");
         event.setLimit(10);
+
         List<Event> eventList = new ArrayList<>();
         eventList.add(event);
+        eventList.add(newEvent);
 
         model.addAttribute("eventList", eventList);
 
