@@ -11,11 +11,13 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Map;
 
+import static org.hamcrest.Matchers.notNullValue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.request;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
@@ -37,6 +39,7 @@ public class SampleControllerTest {
                 .andDo(print())
                 .andExpect(view().name("/events/form"))
                 .andExpect(model().attributeExists("event"))
+                .andExpect(request().sessionAttribute("event", notNullValue()))
         ;
     }
 

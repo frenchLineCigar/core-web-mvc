@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,10 +24,11 @@ import java.util.List;
 public class SampleController {
 
     @GetMapping("/events/form")
-    public String eventsForm(Model model) {
+    public String eventsForm(Model model, HttpSession httpSession) {
         Event newEvent = new Event();
         newEvent.setLimit(50);
-        model.addAttribute("event", newEvent); //form backing object
+        model.addAttribute("event", newEvent);
+        httpSession.setAttribute("event", newEvent);
         return "/events/form";
     }
 
