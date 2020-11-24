@@ -2,10 +2,15 @@ package me.frenchline.corewebmvc;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.validation.Valid;
 
 /**
  * @author swlee
@@ -23,13 +28,15 @@ public class SampleController {
         return "/events/form";
     }
 
-    @PostMapping("/events")
+    @PostMapping("/events/name/{name}")
     @ResponseBody
-    public Event getEvent(@RequestParam String name,
-                          @RequestParam Integer limit) {
-        Event event = new Event();
-        event.setName(name);
-        event.setLimit(limit);
+    public Event getEvent(@Valid @ModelAttribute Event event, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            System.out.println("=======================");
+        }
+        bindingResult.getAllErrors().forEach(c -> {
+            System.out.println("c = " + c.toString());
+        });
         return event;
     }
 

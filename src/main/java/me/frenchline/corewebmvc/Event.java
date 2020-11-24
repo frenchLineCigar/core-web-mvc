@@ -1,5 +1,7 @@
 package me.frenchline.corewebmvc;
 
+import javax.validation.constraints.Min;
+
 /**
  * @author swlee
  * @contact frenchline707@gmail.com
@@ -11,6 +13,7 @@ public class Event {
 
     private String name;
 
+    @Min(0)
     private Integer limit;
 
     public Integer getId() {

@@ -37,10 +37,9 @@ public class SampleControllerTest {
     }
 
     @Test
-    public void getEvent() throws Exception {
-        mockMvc.perform(post("/events")
-                        .param("name", "frenchline")
-                        .param("limit", "20"))
+    public void postEvent() throws Exception {
+        mockMvc.perform(post("/events/name/frenchline")
+                        .param("limit", "-10")) //바인딩 에러 발생
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("frenchline"))
