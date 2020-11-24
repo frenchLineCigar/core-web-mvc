@@ -39,13 +39,20 @@ public class SampleController {
     }
 
     @GetMapping("/events/form/limit") //limit만 받는 폼
-    public String eventsFormLimit(@ModelAttribute Event event, Model model) {
-        model.addAttribute("event", event);
+    public String eventsFormLimit() {
         return "/events/form-limit";
     }
 
+//    @GetMapping("/events/form/limit") //limit만 받는 폼
+//    public String eventsFormLimit(@ModelAttribute Event event, Model model) {
+//        model.addAttribute("event", event);
+//        return "/events/form-limit";
+//    }
+
     @PostMapping("/events/form/limit")
     public String eventsFormLimitSubmit(@Validated @ModelAttribute Event event, BindingResult bindingResult, SessionStatus sessionStatus) {
+
+        System.out.println("event = " + event);
 
         if (bindingResult.hasErrors()) {
             return "/events/form-limit";
