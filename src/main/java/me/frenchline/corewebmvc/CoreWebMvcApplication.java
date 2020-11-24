@@ -11,12 +11,4 @@ public class CoreWebMvcApplication {
         SpringApplication.run(CoreWebMvcApplication.class, args);
     }
 
-    @Bean("tempEvent")
-    public Event event() {
-        Event event = new Event();
-        event.setName("Spring is coming.");
-        event.setLimit(11111111);
-        return event;
-    }
-
 }
