@@ -34,6 +34,19 @@ public class SampleControllerTest {
     @Autowired
     MockMvc mockMvc;
 
+
+    @Test
+    public void testSessionAttributes() throws Exception {
+        MockHttpServletRequest request = mockMvc.perform(get("/events/form/name"))
+                .andDo(print())
+                .andExpect(view().name("/events/form-name"))
+                .andExpect(model().attributeExists("event"))
+                .andExpect(request().sessionAttribute("event", notNullValue()))
+                .andReturn().getRequest();
+        Object event = request.getSession().getAttribute("event"); //@SessionAttributes("event") 작동 확인
+        System.out.println("event = " + event);
+    }
+
     @Test
     public void eventForm() throws Exception {
         MockHttpServletRequest request = mockMvc.perform(get("/events/form"))

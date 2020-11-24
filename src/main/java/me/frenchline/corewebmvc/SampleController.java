@@ -1,5 +1,6 @@
 package me.frenchline.corewebmvc;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -20,44 +21,52 @@ import java.util.List;
  * @since 2019-11-23
  */
 @Controller
-@SessionAttributes("event") //모델의 애트리뷰트 중 event를 세션에도 자동으로 넣어줌
+@SessionAttributes("event") //모델의 애트리뷰트 중 event를 세션에도 자동으로 넣어줌 (세션과 모델은 같은 객체를 참조)
 public class SampleController {
 
-    @GetMapping("/events/form")
-    public String eventsForm(Model model) {
-        Event newEvent = new Event();
-        newEvent.setLimit(50);
-        model.addAttribute("event", newEvent); //세션에도 같이 저장됨
-        return "/events/form";
+    @GetMapping("/events/form/name") //name만 받는 폼
+    public String eventsFormName(Model model) {
+        model.addAttribute("event", new Event());
+        return "/events/form-name";
     }
 
-    @PostMapping("/events")
-    public String createEvent(@Validated @ModelAttribute Event event,
-                              BindingResult bindingResult,
-                              SessionStatus sessionStatus) {
+    @PostMapping("/events/form/name")
+    public String eventsFormNameSubmit(@Validated @ModelAttribute Event event, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return "/events/form";
+            return "/events/form-name";
+        }
+        return "redirect:/events/form/limit";
+    }
+
+    @GetMapping("/events/form/limit") //limit만 받는 폼
+    public String eventsFormLimit(@ModelAttribute Event event, Model model) {
+        model.addAttribute("event", event);
+        return "/events/form-limit";
+    }
+
+    @PostMapping("/events/form/limit")
+    public String eventsFormLimitSubmit(@Validated @ModelAttribute Event event, BindingResult bindingResult, SessionStatus sessionStatus) {
+
+        if (bindingResult.hasErrors()) {
+            return "/events/form-limit";
         }
 
-        //save
-
-        //특정한 폼 처리가 끝났을 때 세션이 만료되도록 처리
+        //save 후 세션 비우기
         sessionStatus.setComplete();
-
         return "redirect:/events/list";
     }
 
     @GetMapping("/events/list")
     public String getEvents(Model model) {
 
-        //find
+        //find 조회한 데이터로 가정
         Event event = new Event();
         event.setName("spring");
         event.setLimit(10);
         List<Event> eventList = new ArrayList<>();
         eventList.add(event);
 
-        model.addAttribute(eventList);
+        model.addAttribute("eventList", eventList);
 
         return "/events/list";
     }
