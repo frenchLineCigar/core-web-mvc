@@ -1,5 +1,7 @@
 package me.frenchline.corewebmvc;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -23,7 +25,7 @@ import java.util.List;
  * @since 2019-11-23
  */
 @Controller
-@SessionAttributes("event") //이 클래스 안에서만, 이 이름에 해당하는 모델 애트리뷰트를 세션에 넣어준다.
+//@SessionAttributes("event") //이 클래스 안에서만, 이 이름에 해당하는 모델 애트리뷰트를 세션에 넣어준다.
 public class SampleController {
 
     @GetMapping("/events/form/name") //name만 받는 폼
@@ -87,14 +89,34 @@ public class SampleController {
         //메서드에 Model 파라미터를 선언만 해놔도 Model에 들어와 있기 때문에
         //따로 선언해서 바인딩 받을 필요 없이 Model에 있는 것을 꺼내 쓰면 된다. 
         Event newEvent = (Event) model.asMap().get("newEvent");
+        System.out.println("newEvent = " + newEvent);
 
         List<Event> eventList = new ArrayList<>();
         eventList.add(spring);
         eventList.add(newEvent);
 
+        System.out.println("eventList = " + eventList);
+
         model.addAttribute("eventList", eventList);
 
         return "/events/list";
+    }
+
+
+    /* @SessionAttributes("event") 주석 처리 후, 영향 없는 상태로 Flash Attributes 테스트 */
+
+    @Autowired
+    @Qualifier("tempEvent")
+    Event tempEvent;
+
+    @GetMapping("/events/empty")
+    public String empty(RedirectAttributes attributes, SessionStatus sessionStatus) {
+
+        sessionStatus.setComplete();
+
+        attributes.addFlashAttribute("newEvent", tempEvent);
+
+        return "redirect:/events/list";
     }
 
 }
