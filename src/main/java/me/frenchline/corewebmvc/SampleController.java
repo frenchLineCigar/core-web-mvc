@@ -23,7 +23,7 @@ import java.util.List;
  * @since 2019-11-23
  */
 @Controller
-//@SessionAttributes("event") //이 클래스 안에서만, 이 이름에 해당하는 모델 애트리뷰트를 세션에 넣어준다.
+@SessionAttributes("event") //이 클래스 안에서만, 이 이름에 해당하는 모델 애트리뷰트를 세션에 넣어준다.
 public class SampleController {
 
     @GetMapping("/events/form/name") //name만 받는 폼
