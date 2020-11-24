@@ -10,6 +10,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.time.LocalDateTime;
 import java.util.Map;
 
 import static org.hamcrest.Matchers.notNullValue;
@@ -21,6 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.request;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.xpath;
 
 /**
  * @author swlee
@@ -70,6 +72,22 @@ public class SampleControllerTest {
         ModelAndView mav = result.andReturn().getModelAndView();
         Map<String, Object> model = mav.getModel();
         System.out.println(model.size());
+    }
+
+    @Test
+    public void getEvents() throws Exception {
+        Event newEvent = new Event();
+        newEvent.setName("Winter is coming.");
+        newEvent.setLimit(1234567890);
+
+        mockMvc.perform(get("/events/list")
+                        .sessionAttr("visitTime", LocalDateTime.now())
+                        .flashAttr("newEvent", newEvent))
+                .andDo(print())
+                .andExpect(status().isOk())
+                //html body도 xpath로 검증할 수 있다.
+                .andExpect(xpath("//p").nodeCount(2)) //<p>노드를 전부 선택해서 카운트 한 결과는 2개
+        ;
     }
 
 }
