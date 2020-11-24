@@ -64,9 +64,11 @@ public class SampleController {
     }
 
     @GetMapping("/events/list")
-    public String getEvents(Model model, @SessionAttribute LocalDateTime visitTime) {
+    public String getEvents(Model model, HttpSession httpSession) {
 
-        System.out.println("visitTime = " + visitTime); //@SessionAttribute 사용해 HTTP 세션에 들어있는 값 참조
+        //HttpSession 직접 사용해 HTTP 세션에 들어있는 값 참조
+        LocalDateTime visitTime = (LocalDateTime) httpSession.getAttribute("visitTime");
+        System.out.println("visitTime = " + visitTime);
 
         //find 조회한 데이터로 가정
         Event event = new Event();
