@@ -1,21 +1,17 @@
 package me.frenchline.corewebmvc;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -54,7 +50,7 @@ public class SampleController {
     public String eventsFormLimitSubmit(@Validated @ModelAttribute Event event,
                                         BindingResult bindingResult,
                                         SessionStatus sessionStatus,
-                                        RedirectAttributes attributes) { //RedirectAttribute 사용
+                                        RedirectAttributes attributes) {
 
         if (bindingResult.hasErrors()) {
             return "/events/form-limit";
@@ -63,23 +59,16 @@ public class SampleController {
         //save 후 세션 비우기
         sessionStatus.setComplete();
 
-        // RedirectAttributes 사용 (스프링 부트 기본 설정 유지)
-        // : 리다이렉트 시 URI 쿼리 파라미터로 전달하고자 하는 데이터를 명시할 수 있는 기능이다.
-        // Ex) /events/list?name=spring&limit=10
-        attributes.addAttribute("name", event.getName());
-        attributes.addAttribute("limit", event.getLimit());
+        /* Flash Attributes 사용 : redirect 시 객체도 전달할 수 있다 */
+        //1. 전달하려는 객체는 HTTP 세션에 들어간다.
+        //2. 리다이렉트 된 요청이 처리가 되고 데이터가 사용이 되면 세션에서 제거된다.(일회성)
+        //3. 이름 그대로 일회성이라 Flash라는 키워드가 붙어있다.
+        //4. 세션을 통해 전달되기 때문에 URI에 데이터가 노출되지 않는다.
+        attributes.addFlashAttribute("newEvent", event);
 
         return "redirect:/events/list";
     }
 
-
-    /**
-     * `@ModelAttribute` 사용해 복합 객체(composite object)로 바인딩 시 주의점
-     * -> `@SessionAttributes` 에서 키로 사용한 "이름"과 같이 쓰면 안된다. @SessionAttributes("event")
-     * -> 복합 객체로 바인딩 시, 세션에서 일단 해당 속성의 키로 사용한 "이름"으로 값을 찾아보려고 시도하지만, 앞서 세션이 완료되고, 없기 때문에 에러가 난다. -> 해당 에러 확인!
-     *
-     * 해결: @ModelAttribute의 이름을 @SessionAttributes에 선언한 이름과 다르게 주면 된다. : @ModelAttribute("newEvent")
-     */
     @GetMapping("/events/list")
     public String getEvents(@ModelAttribute("newEvent") Event event,
                             Model model,
