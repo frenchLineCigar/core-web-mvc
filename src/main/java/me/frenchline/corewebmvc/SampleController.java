@@ -63,7 +63,8 @@ public class SampleController {
         //save 후 세션 비우기
         sessionStatus.setComplete();
 
-        /* RedirectAttributes 사용 (스프링 부트 기본 설정 유지) */
+        // RedirectAttributes 사용 (스프링 부트 기본 설정 유지)
+        // : 리다이렉트 시 URI 쿼리 파라미터로 전달하고자 하는 데이터를 명시할 수 있는 기능이다.
         // Ex) /events/list?name=spring&limit=10
         attributes.addAttribute("name", event.getName());
         attributes.addAttribute("limit", event.getLimit());
@@ -76,12 +77,11 @@ public class SampleController {
      * `@ModelAttribute` 사용해 복합 객체(composite object)로 바인딩 시 주의점
      * -> `@SessionAttributes` 에서 키로 사용한 "이름"과 같이 쓰면 안된다. @SessionAttributes("event")
      * -> 복합 객체로 바인딩 시, 세션에서 일단 해당 속성의 키로 사용한 "이름"으로 값을 찾아보려고 시도하지만, 앞서 세션이 완료되고, 없기 때문에 에러가 난다. -> 해당 에러 확인!
-     * -> 콘솔 확인
-     * org.springframework.web.HttpSessionRequiredException: Expected session attribute 'event'
-     * 	at org.springframework.web.method.annotation.ModelFactory.initModel(ModelFactory.java:112) <- 소스 코드를 까보면 세션에서 일단 찾고, 없으면 예외를 뱉는다
+     *
+     * 해결: @ModelAttribute의 이름을 @SessionAttributes에 선언한 이름과 다르게 주면 된다. : @ModelAttribute("newEvent")
      */
     @GetMapping("/events/list")
-    public String getEvents(@ModelAttribute Event event, //@ModelAttribute 사용해 복합 객체(composite object)로 바인딩 시, 에러 발생
+    public String getEvents(@ModelAttribute("newEvent") Event event,
                             Model model,
                             @SessionAttribute LocalDateTime visitTime) {
 
