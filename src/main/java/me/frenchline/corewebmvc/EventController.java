@@ -1,5 +1,6 @@
 package me.frenchline.corewebmvc;
 
+import org.springframework.format.datetime.DateFormatter;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -34,21 +35,12 @@ import static java.util.Locale.US;
 @SessionAttributes("event")
 public class EventController {
 
-    /**
-     * DataBinder : @InitBinder
-     * 데이터들을 바인딩할 때 사용하는 데이터 바인드를 커스터마이징 할 수 있다
-     * 특정 컨트롤러 안에서 사용하는 데이터 바인드 설정 : @InitBinder 애노테이션을 붙인 메서드를 정의해서 바인딩 설정을 변경할 수 있다
-     * - 리턴 타입은 반드시 void 이어야 하고, 메서드명 제약은 없다.
-     * - WebDataBinder 아규먼트는 반드시 있어야 한다
-     * setDisallowedFields : 받고 싶지 않은 필드값을 걸러낼 수 있다. (블랙 리스트)
-     * setAllowedFields : 받고 싶은 필드값을 명기한다. (화이트 리스트)
-     * - id는 이벤트를 저장할 때 생성하고 싶기 때문에 id값을 폼이나 쿼리 패스나 쿼리 파라미터 등으로 받아오고 싶지 않다면
-     * - id를 폼에서 보내더라도 걸러내고 바인딩 하지 않는다
-     */
-    /* 모든 요청 전에 호출 */
     @InitBinder
     public void initEventBinder(WebDataBinder webDataBinder) {
+        /* 바인딩(Binding) 설정 */
         webDataBinder.setDisallowedFields("id");
+        /* 포메터(Formatter) 설정 : 기본으로 등록돼있지 않은 커스텀 포매터를 인자로 전달한다 */
+        //webDataBinder.addCustomFormatter(new MyFormatter());
     }
 
     @ModelAttribute
