@@ -1,5 +1,6 @@
 package me.frenchline.corewebmvc;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.datetime.DateFormatter;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -35,12 +36,13 @@ import static java.util.Locale.US;
 @SessionAttributes("event")
 public class EventController {
 
+    @Autowired
+    EventValidator eventValidator; //빈 등록 후 원하는 시점에 주입받아 사용할 수 있음
+
     @InitBinder
     public void initEventBinder(WebDataBinder webDataBinder) {
         /* 바인딩(Binding) 설정 */
         webDataBinder.setDisallowedFields("id");
-        /* Validator 설정 */
-        webDataBinder.addValidators(new EventValidator());
         /* 포메터(Formatter) 설정 : 기본으로 등록돼있지 않은 커스텀 포매터를 인자로 전달한다 */
         //webDataBinder.addCustomFormatter(new MyFormatter());
     }
@@ -70,9 +72,11 @@ public class EventController {
     @PostMapping("/events/form/name")
     public String eventsFormNameSubmit(@Validated @ModelAttribute Event event,
                                        BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
+        if (bindingResult.hasErrors()) { //스프링이 기본으로 제공해주는 바인딩 에러와 Validation 에러를 검증
             return "/events/form-name";
         }
+        eventValidator.validate(event, bindingResult); //명시적으로 원하는 시점에 해당 Validator를 사용해서 검증
+
         return "redirect:/events/form/limit";
     }
 
