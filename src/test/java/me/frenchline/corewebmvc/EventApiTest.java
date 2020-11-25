@@ -35,7 +35,7 @@ public class EventApiTest {
     public void createEvent() throws Exception {
         Event event = new Event();
         event.setName("frenchline");
-        event.setLimit(20);
+        event.setLimit(-20); //마이너스 값
 
         String json = objectMapper.writeValueAsString(event);
 
@@ -45,7 +45,7 @@ public class EventApiTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("frenchline"))
-                .andExpect(jsonPath("$.limit").value(20))
+                .andExpect(jsonPath("$.limit").value(-20))
         ;
     }
 
