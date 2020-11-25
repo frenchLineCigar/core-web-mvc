@@ -43,7 +43,7 @@ public class EventApiTest {
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(json))
                 .andDo(print())
-                .andExpect(status().isOk())
+                .andExpect(status().isOk()) //BindingResult를 선언하지 않으면, 바인딩 에러가 바로 발생할 거고, 현재 테스트는 실패한다 Status = 400
                 .andExpect(jsonPath("$.name").value("frenchline"))
                 .andExpect(jsonPath("$.limit").value(-20))
         ;
