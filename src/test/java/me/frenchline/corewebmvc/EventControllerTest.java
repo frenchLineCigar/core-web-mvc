@@ -36,9 +36,19 @@ public class EventControllerTest {
     @Autowired
     MockMvc mockMvc;
 
+    @Test
+    public void modelAttributesTest() throws Exception {
+        MockHttpServletRequest request = mockMvc.perform(get("/events/model-attributes"))
+                .andDo(print())
+                .andExpect(model().attributeExists("newAttr"))
+                .andExpect(request().sessionAttribute("newAttr", notNullValue()))
+                .andReturn().getRequest();
+        Object event = request.getSession().getAttribute("newAttr");
+        System.out.println("event = " + event);
+    }
 
     @Test
-    public void testSessionAttributes() throws Exception {
+    public void SessionAttributesTest() throws Exception {
         MockHttpServletRequest request = mockMvc.perform(get("/events/form/name"))
                 .andDo(print())
                 .andExpect(view().name("/events/form-name"))
@@ -86,7 +96,7 @@ public class EventControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("categories"))
-                .andExpect(model().attributeExists("countries"))
+                .andExpect(model().attributeExists("locales"))
                 //html body도 xpath로 검증할 수 있다.
                 .andExpect(xpath("//p").nodeCount(2)) //<p>노드를 전부 선택해서 카운트 한 결과는 2개
         ;
