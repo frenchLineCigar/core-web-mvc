@@ -12,7 +12,6 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
@@ -41,11 +40,12 @@ public class EventApiTest {
 
         mockMvc.perform(post("/api/events")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
+//                .accept(MediaType.APPLICATION_JSON_UTF8) //Accept Header 값 정의
                 .content(json))
                 .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name").value("frenchline"))
-                .andExpect(jsonPath("$.limit").value(-20))
+                .andExpect(status().isBadRequest()) //400 Bad Request
+//                .andExpect(jsonPath("$.name").value("frenchline"))
+//                .andExpect(jsonPath("$.limit").value(-20))
         ;
     }
 
