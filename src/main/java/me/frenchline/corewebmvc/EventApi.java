@@ -24,7 +24,15 @@ import javax.validation.Valid;
 public class EventApi {
 
     @PostMapping
-    public Event createEvent(@RequestBody @Valid Event event) {
+    public Event createEvent(@RequestBody @Valid Event event, BindingResult bindingResult) {
+
+        if (bindingResult.hasErrors()) {
+            bindingResult.getAllErrors().forEach(error -> {
+                //바인딩 에러가 발생할때 수행할 로직
+                System.out.println("error = " + error);
+            });
+        }
+
         // save event
 
         return event;
