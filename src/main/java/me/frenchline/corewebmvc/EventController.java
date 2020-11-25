@@ -27,7 +27,7 @@ import static java.util.Locale.*;
  * @since 2019-11-25
  */
 @Controller
-@SessionAttributes({"event", "newAttr"})
+@SessionAttributes("event")
 public class EventController {
 
     @ModelAttribute
@@ -41,9 +41,9 @@ public class EventController {
     }
 
     @GetMapping("/events/model-attributes")
-    @ModelAttribute("newAttr") //이렇게 @RequestMapping류 애노테이션과 같이 사용하면
+    @ModelAttribute("newAttr")
     public Event eventsFormName() {
-        return new Event(); //리턴하는 객체를 Model에 자동으로 넣어준다
+        return new Event();
     }
 
     @GetMapping("/events/form/name")

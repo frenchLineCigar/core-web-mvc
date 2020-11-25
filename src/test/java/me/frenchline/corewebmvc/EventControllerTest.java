@@ -11,6 +11,8 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.time.LocalDateTime;
+import java.util.Enumeration;
+import java.util.List;
 import java.util.Map;
 
 import static org.hamcrest.Matchers.notNullValue;
@@ -41,10 +43,12 @@ public class EventControllerTest {
         MockHttpServletRequest request = mockMvc.perform(get("/events/model-attributes"))
                 .andDo(print())
                 .andExpect(model().attributeExists("newAttr"))
-                .andExpect(request().sessionAttribute("newAttr", notNullValue()))
+                .andExpect(request().sessionAttributeDoesNotExist("event"))
                 .andReturn().getRequest();
-        Object event = request.getSession().getAttribute("newAttr");
-        System.out.println("event = " + event);
+        Enumeration<String> attributeNames = request.getSession().getAttributeNames();
+        while(attributeNames.hasMoreElements()){
+            System.out.println("attribute in Session : "+attributeNames.nextElement());
+        }
     }
 
     @Test
