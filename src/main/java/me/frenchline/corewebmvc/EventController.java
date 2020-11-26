@@ -1,12 +1,11 @@
 package me.frenchline.corewebmvc;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.datetime.DateFormatter;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -14,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDateTime;
@@ -36,11 +36,34 @@ import static java.util.Locale.US;
 @SessionAttributes("event")
 public class EventController {
 
-    /**
-     * `@InitBinder`에 값(value)을 줄 수 있다
-     * : 특정 모델 객체에만 Binding 또는 Validator 설정을 적용하고 싶은 경우
-     * Ex) @InitBinder("event") //event란 이름의 모델 애트리뷰트를 바인딩 받을때만 적용
-     */
+    /* 예외 핸들러 정의 */
+    /* - 처리하고 싶은 예외를 메서드 아규먼트로 선언하면 된다 */
+    /* - 해당 예외가 발생하면 정의한 이 메서드의 아규먼트로 해당 예외가 들어오게 된다 */
+    /* - 해당 예외가 발생하면 특정한 메세지와 함께 특정한 에러 페이지로 이동하는 처리 */
+    @ExceptionHandler
+    public String eventErrorHandler(EventException exception, Model model, HandlerMethod method) {
+
+        System.out.println("EventController.eventErrorHandler");
+        String methodName = method.getMethod().getName();
+        System.out.println("methodName = " + methodName);
+
+        model.addAttribute("message", "event error");
+        return "error";
+    }
+    /* - 가장 구체적인 타입의 예외로 맵핑 된다 */
+    /* - EventException 의 상위 타입은 RuntimeException 로 정의했음 */
+    /* - EventException 예외 발생 시, 아래의 핸들러는 호출되지 않는다 */
+    @ExceptionHandler
+    public String runtimeErrorHandler(RuntimeException exception, Model model, HandlerMethod method) {
+
+        System.out.println("EventController.runtimeErrorHandler");
+        String methodName = method.getMethod().getName();
+        System.out.println("methodName = " + methodName);
+
+        model.addAttribute("message", "runtime error");
+        return "error";
+    }
+
     @InitBinder("event")
     public void initEventBinder(WebDataBinder webDataBinder) {
         /* 바인딩(Binding) 설정 */
@@ -67,8 +90,10 @@ public class EventController {
 
     @GetMapping("/events/form/name")
     public String eventsFormName(Model model) {
-        model.addAttribute("event", new Event());
-        return "/events/form-name";
+        throw new EventException(); //예외를 던지면 위의 @ExceptionHandler로 정의한 해당 예외 핸들러가 동작
+//
+//        model.addAttribute("event", new Event());
+//        return "/events/form-name";
     }
 
     @PostMapping("/events/form/name")
