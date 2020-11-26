@@ -46,9 +46,12 @@ public class EventController {
     /* 3. 여러 예외를 같은 예외 핸들러 내에서 처리하고 싶은 경우, @ExceptionHandler 애노테이션에 값을 정의한다 */
     /* - 이때 상위 타입으로 아규먼트를 정의해야 그 하위 타입의 예외까지 다 담을 수 있다 */
     @ExceptionHandler({EventException.class, RuntimeException.class})
-    public String eventErrorHandler(RuntimeException exception, Model model, HandlerMethod method) {
-        System.out.println("exception type = " + exception.getClass());
-        model.addAttribute("message", exception.getMessage());
+    public String eventErrorHandler(RuntimeException ex, Model model, HandlerMethod method) {
+        System.out.println("Exception Type : " + ex.getClass());
+        System.out.println("Handler Method : " + method.getMethod());
+
+        String message = (ex.getMessage() != null) ? ex.getMessage() : "runtime error";
+        model.addAttribute("message", message);
         return "error";
     }
     
