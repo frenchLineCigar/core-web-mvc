@@ -23,15 +23,15 @@ public class EventApi {
 
     @PostMapping
     public ResponseEntity<Event> createEvent(@RequestBody @Valid Event event, BindingResult bindingResult) {
-        throw new EventApiException("you are not cool!");
-//        if (bindingResult.hasErrors()) {
-//            //바인딩 에러가 발생할때 수행할 로직
-//            return ResponseEntity.badRequest().build();
-//        }
-//
-//        // save event
-//
-//        return new ResponseEntity<Event>(event, HttpStatus.CREATED); //원래 201 Created로 상태를 보낼때는 URI 정보도 Location 헤더에 담아서 보내줘야 한다.
+//        throw new EventApiException("you are not cool!");
+        if (bindingResult.hasErrors()) {
+            //바인딩 에러가 발생할때 수행할 로직
+            return ResponseEntity.badRequest().build();
+        }
+
+        // save event
+
+        return new ResponseEntity<Event>(event, HttpStatus.CREATED); //원래 201 Created로 상태를 보낼때는 URI 정보도 Location 헤더에 담아서 보내줘야 한다.
 //        return ResponseEntity.ok(event);
 //        return ResponseEntity.ok().build();
     }

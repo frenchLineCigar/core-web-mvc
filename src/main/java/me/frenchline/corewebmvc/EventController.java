@@ -33,11 +33,11 @@ public class EventController {
 
     @GetMapping("/events/form/name")
     public String eventsFormName(Model model) {
-        throw new EventException("event error"); //예외를 던지면 위의 @ExceptionHandler로 정의한 해당 예외 핸들러가 동작
+//        throw new EventException("event error"); //예외를 던지면 위의 @ExceptionHandler로 정의한 해당 예외 핸들러가 동작
 //        throw new RuntimeException("runtime error");
-//
-//        model.addAttribute("event", new Event());
-//        return "/events/form-name";
+
+        model.addAttribute("event", new Event());
+        return "/events/form-name";
     }
 
     @PostMapping("/events/form/name")
