@@ -37,6 +37,7 @@ import static java.util.Locale.US;
 public class EventController {
 
     /* 예외 핸들러 정의 */
+    /* - 컨트롤러 내 특정 예외가 발생했을때 그 에러를 처리할 수 있는 요청 처리 핸들러 */
     /* 1. 처리하고 싶은 예외를 메서드 아규먼트로 선언하면 된다 */
     /* - 해당 예외가 발생하면 정의한 이 메서드의 아규먼트로 해당 예외가 들어오게 된다 */
     /* - 해당 예외가 발생하면 특정한 메세지와 함께 특정한 에러 페이지로 이동하도록 처리함 */
@@ -54,7 +55,9 @@ public class EventController {
         model.addAttribute("message", message);
         return "error";
     }
-    
+
+    /* 데이터 바인더 설정 */
+    /* - 컨트롤러 내 핸들러들이 특정 값을 바인딩할때 Validator를 추가하거나 커스텀한 바인딩 로직을 추가 */
     @InitBinder("event")
     public void initEventBinder(WebDataBinder webDataBinder) {
         /* 바인딩(Binding) 설정 */
@@ -63,6 +66,9 @@ public class EventController {
         webDataBinder.addValidators(new EventValidator());
     }
 
+    /* 모델 어트리뷰트 정의 */
+    /* - 컨트롤러 내 모든 핸들러들이 공통적으로 사용할 모델 객체를 정의 */
+    /* - 모든 핸들러들의 모델에 담기게 된다 */
     @ModelAttribute
     public void categories(Model model) {
         model.addAttribute("categories", List.of("study", "seminar", "hobby", "social"));
