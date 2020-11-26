@@ -37,33 +37,21 @@ import static java.util.Locale.US;
 public class EventController {
 
     /* 예외 핸들러 정의 */
-    /* - 처리하고 싶은 예외를 메서드 아규먼트로 선언하면 된다 */
+    /* 1. 처리하고 싶은 예외를 메서드 아규먼트로 선언하면 된다 */
     /* - 해당 예외가 발생하면 정의한 이 메서드의 아규먼트로 해당 예외가 들어오게 된다 */
-    /* - 해당 예외가 발생하면 특정한 메세지와 함께 특정한 에러 페이지로 이동하는 처리 */
-    @ExceptionHandler
-    public String eventErrorHandler(EventException exception, Model model, HandlerMethod method) {
-
-        System.out.println("EventController.eventErrorHandler");
-        String methodName = method.getMethod().getName();
-        System.out.println("methodName = " + methodName);
-
-        model.addAttribute("message", "event error");
+    /* - 해당 예외가 발생하면 특정한 메세지와 함께 특정한 에러 페이지로 이동하도록 처리함 */
+    /* 2. 가장 구체적인 타입의 예외로 맵핑 된다 */
+    /* - EventException 의 상위 타입을 RuntimeException 로 정의했음 */
+    /* - 자식 타입의 예외와 부모 타입의 예외 핸들러를 각각 정의했을 경우, 자식 예외 발생 시 부모 타입의 예외 핸들러는 호출되지 않는다 */
+    /* 3. 여러 예외를 같은 예외 핸들러 내에서 처리하고 싶은 경우, @ExceptionHandler 애노테이션에 값을 정의한다 */
+    /* - 이때 상위 타입으로 아규먼트를 정의해야 그 하위 타입의 예외까지 다 담을 수 있다 */
+    @ExceptionHandler({EventException.class, RuntimeException.class})
+    public String eventErrorHandler(RuntimeException exception, Model model, HandlerMethod method) {
+        System.out.println("exception type = " + exception.getClass());
+        model.addAttribute("message", exception.getMessage());
         return "error";
     }
-    /* - 가장 구체적인 타입의 예외로 맵핑 된다 */
-    /* - EventException 의 상위 타입은 RuntimeException 로 정의했음 */
-    /* - EventException 예외 발생 시, 아래의 핸들러는 호출되지 않는다 */
-    @ExceptionHandler
-    public String runtimeErrorHandler(RuntimeException exception, Model model, HandlerMethod method) {
-
-        System.out.println("EventController.runtimeErrorHandler");
-        String methodName = method.getMethod().getName();
-        System.out.println("methodName = " + methodName);
-
-        model.addAttribute("message", "runtime error");
-        return "error";
-    }
-
+    
     @InitBinder("event")
     public void initEventBinder(WebDataBinder webDataBinder) {
         /* 바인딩(Binding) 설정 */
@@ -90,7 +78,8 @@ public class EventController {
 
     @GetMapping("/events/form/name")
     public String eventsFormName(Model model) {
-        throw new EventException(); //예외를 던지면 위의 @ExceptionHandler로 정의한 해당 예외 핸들러가 동작
+        throw new EventException("event error"); //예외를 던지면 위의 @ExceptionHandler로 정의한 해당 예외 핸들러가 동작
+//        throw new RuntimeException("runtime error");
 //
 //        model.addAttribute("event", new Event());
 //        return "/events/form-name";
