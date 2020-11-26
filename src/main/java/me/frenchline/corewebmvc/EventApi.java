@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.method.HandlerMethod;
 
 import javax.validation.Valid;
 
@@ -20,27 +21,17 @@ import javax.validation.Valid;
 @RequestMapping("/api/events")
 public class EventApi {
 
-    /* 예외 핸들러 정의 (REST API) */
-    /* 1. 응답 본문 리턴 타입으로 ResponseEntity 를 주로 쓴다 */
-    /* - REST API의 경우 응답 본문에 에러에 대한 정보를 담아주고, 상태 코드를 설정하려면 ResponseEntity를 주로 사용 */
-    /* - 응답 본문(ResponseBody)에 에러 정보와 상태 값을 줘야 한다 */
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity errorHandler(Exception ex) {
-        String message = (ex.getMessage() != null) ? ex.getMessage() : null;
-        return ResponseEntity.badRequest().body("can't create event as ... " + message); //에러의 이유를 표시할 수 있도록 적절한 메세지
-    }
-
     @PostMapping
     public ResponseEntity<Event> createEvent(@RequestBody @Valid Event event, BindingResult bindingResult) {
-//        throw new RuntimeException("you are not cool!");
-        if (bindingResult.hasErrors()) {
-            //바인딩 에러가 발생할때 수행할 로직
-            return ResponseEntity.badRequest().build();
-        }
-
-        // save event
-
-        return new ResponseEntity<Event>(event, HttpStatus.CREATED); //원래 201 Created로 상태를 보낼때는 URI 정보도 Location 헤더에 담아서 보내줘야 한다.
+        throw new EventApiException("you are not cool!");
+//        if (bindingResult.hasErrors()) {
+//            //바인딩 에러가 발생할때 수행할 로직
+//            return ResponseEntity.badRequest().build();
+//        }
+//
+//        // save event
+//
+//        return new ResponseEntity<Event>(event, HttpStatus.CREATED); //원래 201 Created로 상태를 보낼때는 URI 정보도 Location 헤더에 담아서 보내줘야 한다.
 //        return ResponseEntity.ok(event);
 //        return ResponseEntity.ok().build();
     }
